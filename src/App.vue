@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <div class="game">
-      <h2>Морской бой</h2>
+      <h2 class="title">Морской бой</h2>
       <div class="players">
-        <Player :board="playerField"/>
-        <div class="computer"></div>
+        <Player :board="playerField" :player="'human'" :name="playerName"/>
+        <Player :board="playerField" :player="'computer'" :name="computerName"/>
       </div>
-      <h2>Ходит игрок</h2>
+      <h2>Ходит {{playerName}}</h2>
     </div>
   </div>
 </template>
@@ -21,6 +21,9 @@ export default {
   components: {Player},
   data() {
     return {
+      playerName: 'Иван Сусликов',
+      computerName: 'T-1000',
+      // currentPlayer: this.playerName,
       playerField: field
     }
   },
@@ -48,21 +51,21 @@ export default {
   .game {
     width: 1200px;
     height: 700px;
-    border: 1px black solid;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
   }
 
+  .title {
+    margin-bottom: 20px;
+  }
+
   .players {
     width: 1150px;
     height: 600px;
-    border: 1px green solid;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
   }
-
-
 </style>
