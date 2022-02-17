@@ -41,7 +41,7 @@
     }
 
     input {
-        width: 400px;
+        width: 350px;
         height: 35px;
         padding-left: 5px;
         font-size: 20px;
@@ -61,7 +61,7 @@
         font-size: 20px;
         border-radius: 5px;
         border: 0;
-        box-shadow: 0 0 2px black;
+        box-shadow: 0 0 1px 2px blue;
         cursor: pointer;
         background-color: rgba(30, 144, 255, 0.3);
     }

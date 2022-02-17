@@ -16,8 +16,9 @@
                 />
             </div>
             <span class="playerTurn">Ходит {{playerName}}</span>
-        </div>
 
+        </div>
+        <GameOver v-if="gameOver" :win="win" @restart-game="restartGame"/>
     </div>
 </template>
 
@@ -26,20 +27,22 @@
     import Player from "./components/Player";
     import StartMenu from "./components/StartMenu";
     import BattleField from "./BattleField";
+    import GameOver from "./components/GameOver";
 
     export default {
         name: 'App',
-        components: {StartMenu, Player},
+        components: {GameOver, StartMenu, Player},
         data() {
             return {
                 hideGame: true,
-                playerName: '',
+                playerName: 'Иосиф Брик',
                 computerName: 'T-1000',
-                playerField: new BattleField().field,
-                computerField: new BattleField().field,
+                // defaultPlayerField: new BattleField().field,
+                // defaultComputerField: new BattleField().field,
                 playerScore: 0,
                 computerScore: 0,
-                gameOver: false
+                gameOver: false,
+                win: false,
             }
         },
         methods: {
@@ -54,17 +57,39 @@
                 }
 
             },
-            endGame(winner) {
+            endGame() {
                 if (this.playerScore > this.computerScore) {
-
-                    this.gameOver = true;
+                    this.win = true;
                 }
+
+                this.gameOver = true;
+            },
+            restartGame() {
+                this.gameOver = false;
+                this.playerScore = 0;
+                this.computerScore = 0;
             }
         },
+        computed: {
+            playerField() {
+                if (!this.gameOver) {
+                    return new BattleField().field;
+                }
+                return [];
+            },
+
+            computerField() {
+                if (!this.gameOver) {
+                    return new BattleField().field;
+                }
+                return [];
+            }
+
+        },
+
         watch: {
             playerScore() {
-                if (this.playerScore === 20) {
-                    this.winner = this.playerName;
+                if (this.playerScore === 3) {
                     this.endGame();
                 }
             },
@@ -72,7 +97,7 @@
                 if (this.computerScore === 20) {
                     this.endGame()
                 }
-            }
+            },
         }
     }
 </script>
