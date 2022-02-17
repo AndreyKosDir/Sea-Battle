@@ -1,8 +1,8 @@
 <template>
     <div id="app">
         <StartMenu v-if="hideGame" @start-game="startGame"/>
-        <div class="game" v-show="!hideGame">
-            <h2 class="title">Морской бой</h2>
+        <div class="game" v-if="!hideGame">
+            <span class="title">Морской бой</span>
             <div class="players">
                 <Player
                         :board="playerField"
@@ -15,8 +15,9 @@
                         @player-shoots="playerShoots"
                 />
             </div>
-            <h2>Ходит {{playerName}}</h2>
+            <span class="playerTurn">Ходит {{playerName}}</span>
         </div>
+
     </div>
 </template>
 
@@ -31,14 +32,14 @@
         components: {StartMenu, Player},
         data() {
             return {
-                hideGame: false,
-                playerName: 'asd',
+                hideGame: true,
+                playerName: '',
                 computerName: 'T-1000',
                 playerField: new BattleField().field,
                 computerField: new BattleField().field,
                 playerScore: 0,
                 computerScore: 0,
-                winner: ''
+                gameOver: false
             }
         },
         methods: {
@@ -53,8 +54,11 @@
                 }
 
             },
-            endGame() {
-                console.log('Победитель:   ' + this.winner)
+            endGame(winner) {
+                if (this.playerScore > this.computerScore) {
+
+                    this.gameOver = true;
+                }
             }
         },
         watch: {
@@ -62,6 +66,11 @@
                 if (this.playerScore === 20) {
                     this.winner = this.playerName;
                     this.endGame();
+                }
+            },
+            computerScore() {
+                if (this.computerScore === 20) {
+                    this.endGame()
                 }
             }
         }
@@ -77,26 +86,32 @@
     #app {
         width: 100vw;
         height: 100vh;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: start;
+        font-family: Arial Narrow, serif;
     }
 
     .game {
         width: 1200px;
-        height: 700px;
+        height: 780px;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: start;
         align-items: center;
     }
 
     .title {
-        margin-bottom: 20px;
+        margin: 20px 0 30px 0;
+        font-size: 45px;
+        font-weight: bold;
+        color: blue;
+        text-shadow: 2px 1px black;
+    }
+
+    .playerTurn {
+        margin: 25px;
+        font-size: 30px;
     }
 
     .players {

@@ -1,6 +1,6 @@
 <template>
     <div class="startMenu">
-        <h1>Введите ваше имя</h1>
+        <span>Введите ваше имя</span>
         <Input @start-game="startGame"/>
     </div>
 </template>
@@ -22,12 +22,18 @@
     .startMenu {
         width: 600px;
         height: 180px;
+        margin-top: 200px;
         border-radius: 10px;
-        box-shadow: 0 0 3px black;
+        box-shadow: 0 0 2px 3px blue;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: center;
         align-items: center;
+    }
+
+    span {
+        font-size: 35px;
+        margin-bottom: 30px;
     }
 
 </style>
