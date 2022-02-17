@@ -4,8 +4,16 @@
         <div class="game" v-show="!hideGame">
             <h2 class="title">Морской бой</h2>
             <div class="players">
-                <Player :board="playerField" :player="'human'" :name="playerName"/>
-                <Player :board="comuterField" :player="'computer'" :name="computerName"/>
+                <Player
+                        :board="playerField"
+                        :player="'human'"
+                        :name="playerName"
+                />
+                <Player
+                        :board="computerField"
+                        :player="'computer'" :name="computerName"
+                        @player-shoots="playerShoots"
+                />
             </div>
             <h2>Ходит {{playerName}}</h2>
         </div>
@@ -27,30 +35,36 @@
                 playerName: 'asd',
                 computerName: 'T-1000',
                 playerField: new BattleField().field,
-                comuterField: new BattleField().field
+                computerField: new BattleField().field,
+                playerScore: 0,
+                computerScore: 0,
+                winner: ''
             }
         },
         methods: {
             startGame(playerName) {
                 this.playerName = playerName;
                 this.hideGame = false;
+            },
+
+            playerShoots(inTheMark) {
+                if (inTheMark) {
+                    this.playerScore += 1;
+                }
+
+            },
+            endGame() {
+                console.log('Победитель:   ' + this.winner)
             }
         },
-        // computed: {
-        //     playerField() {
-        //         const gg = new BattleField();
-        //         return gg.field;
-        //     }
-        // }
-        // computed: {
-        //     // playerField() {
-        //     //     return this.playerBattleField.field;
-        //     // },
-        //     //
-        //     // playerFreeCells() {
-        //     //     return this.playerBattleField.freeCells;
-        //     // }
-        // },
+        watch: {
+            playerScore() {
+                if (this.playerScore === 20) {
+                    this.winner = this.playerName;
+                    this.endGame();
+                }
+            }
+        }
     }
 </script>
 

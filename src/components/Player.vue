@@ -15,6 +15,7 @@
                         :cells="line"
                         :row="row"
                         :key="row"
+                        @shoot="shoot"
                 >
                 </CellLine>
             </div>
@@ -33,6 +34,11 @@
             return {
                 lines: ['A', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К']
             }
+        },
+        methods: {
+            shoot(inTheMark) {
+                this.$emit('player-shoots', inTheMark);
+            }
         }
     }
 </script>
@@ -48,8 +54,9 @@
     }
 
     .playerName {
+        margin-left: 50px;
         font-size: 25px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         font-weight: bold;
     }
 

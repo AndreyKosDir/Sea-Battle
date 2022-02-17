@@ -4,9 +4,10 @@
                 v-for="(el, i) of cells"
                 :key="row + '' + i"
                 :line="i"
-                :row="row"
+                :column="row"
                 :cellInfo="el"
                 :player="player"
+                @shootInShip="shoot"
         />
     </div>
 </template>
@@ -16,7 +17,12 @@
     export default {
         name: "CellLine",
         components: {Cell},
-        props: ["player", "cells", "row"]
+        props: ["player", "cells", "row"],
+        methods: {
+            shoot(inTheMark) {
+                this.$emit('shoot', inTheMark);
+            }
+        }
     }
 </script>
 

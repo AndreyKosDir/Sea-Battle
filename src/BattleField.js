@@ -73,7 +73,6 @@ export default class BattleField {
                 }
 
                 tryToPut = false;
-                console.log(shipCellsCoord)
             }
 
             // Массив с клетками где стоит корабль сформирован и все клетки подходят.
