@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <div class="game">
+    <StartMenu v-if="hideGame" @start-game="startGame"/>
+    <div class="game" v-show="!hideGame">
       <h2 class="title">Морской бой</h2>
       <div class="players">
         <Player :board="playerField" :player="'human'" :name="playerName"/>
@@ -15,18 +16,26 @@
 
 import {field} from "./Field";
 import Player from "./components/Player";
+import StartMenu from "./components/StartMenu";
 
 export default {
   name: 'App',
-  components: {Player},
+  components: {StartMenu, Player},
   data() {
     return {
-      playerName: 'Иван Сусликов',
+      hideGame: true,
+      playerName: '',
       computerName: 'T-1000',
       // currentPlayer: this.playerName,
       playerField: field
     }
   },
+  methods: {
+    startGame(playerName) {
+      this.playerName = playerName;
+      this.hideGame = false;
+    }
+  }
 }
 </script>
 
