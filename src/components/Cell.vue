@@ -1,18 +1,23 @@
 <template>
-    <div @click="print"></div>
+    <div class="battle-cell" :class="isShip()" @click="print"></div>
 </template>
 
 <script>
     export default {
         name: "Cell",
-        props: ["line", "row", "player"],
+        props: ["line", "row", "player", "cellInfo"],
         methods: {
             print() {
                 if (this.player === 'human') {
                     return;
                 }
 
-                console.log([this.line, this.row]);
+                console.log([this.row, this.line]);
+                console.log(`shipAround = ${this.cellInfo.shipAround}`)
+                console.log(`ship = ${this.cellInfo.ship}`)
+            },
+            isShip() {
+                return this.cellInfo.ship ? 'ship' : '';
             }
         }
     }
@@ -23,6 +28,10 @@
         width: 50px;
         height: 50px;
         box-shadow: 0 0 0 1px blue inset;
+    }
+
+    .ship {
+        background-color: blue;
     }
 
     .computer .battle-cell {

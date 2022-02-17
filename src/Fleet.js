@@ -1,3 +1,5 @@
+import {Helpers} from "./Helpers";
+
 export default class Fleet {
 
     constructor() {
@@ -24,7 +26,7 @@ export default class Fleet {
             for (let i = 0; i < unit.count; i++) {
                 // Случайным образом задается расположение корабля
                 // 0 - горизонтальное, 1 - вертикальное.
-                const direction = this.getRandomNumber(0, 1);
+                const direction = Helpers.getRandomNumber(0, 1);
 
                 const ship = {
                     type: unit.type,
@@ -36,18 +38,6 @@ export default class Fleet {
         }
 
         return fleet;
-    }
-
-    /**
-     * Получить случайное число в заданном интервале включительно.
-     * @param min Минимальное значение.
-     * @param max Максимальное значение.
-     * @returns {number}.
-     */
-    getRandomNumber(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     /**

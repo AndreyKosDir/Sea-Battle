@@ -1,11 +1,11 @@
 <template>
     <div>
         <Cell
-                class="battle-cell"
                 v-for="(el, i) of cells"
                 :key="row + '' + i"
                 :line="i"
                 :row="row"
+                :cellInfo="el"
                 :player="player"
         />
     </div>
