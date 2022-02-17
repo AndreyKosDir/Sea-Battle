@@ -5,7 +5,7 @@
             <h2 class="title">Морской бой</h2>
             <div class="players">
                 <Player :board="playerField" :player="'human'" :name="playerName"/>
-                <Player :board="playerField" :player="'computer'" :name="computerName"/>
+                <Player :board="comuterField" :player="'computer'" :name="computerName"/>
             </div>
             <h2>Ходит {{playerName}}</h2>
         </div>
@@ -26,8 +26,8 @@
                 hideGame: false,
                 playerName: 'asd',
                 computerName: 'T-1000',
-                // currentPlayer: this.playerName,
-
+                playerField: new BattleField().field,
+                comuterField: new BattleField().field
             }
         },
         methods: {
@@ -36,12 +36,12 @@
                 this.hideGame = false;
             }
         },
-        computed: {
-            playerField() {
-                const gg = new BattleField();
-                return gg.field;
-            }
-        }
+        // computed: {
+        //     playerField() {
+        //         const gg = new BattleField();
+        //         return gg.field;
+        //     }
+        // }
         // computed: {
         //     // playerField() {
         //     //     return this.playerBattleField.field;

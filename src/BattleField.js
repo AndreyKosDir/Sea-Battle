@@ -9,7 +9,6 @@ export default class BattleField {
         this.emptyCells = this.createEmptyCells();
         this.fleet = new Fleet().getFleet();
         this.putShips(this.fleet);
-        // this.putShips([{type: 4, direction: 1}]);
     }
 
     /**
@@ -56,57 +55,35 @@ export default class BattleField {
         return emptyCells;
     }
 
-    putShips(fleet) {
+    async putShips(fleet) {
 
         for (const ship of fleet) {
 
-            /**
-             * поставить 4х палубный корабль.
-             */
-            if (ship.type === 4) {
-                let tryToPut = true;
+            let shipCellsCoord = [];
 
-                while (tryToPut) {
+            let tryToPut = true;
 
-                    const shipCellsCoord = [];
-                    let startNextIteration = !this.putShip(ship, shipCellsCoord);
+            while (tryToPut) {
+                let startNextIteration = !this.putShip(ship, shipCellsCoord);
 
-                    // Если какая-то из палуб корабля заходит на поле, которое занято кораблем или рядом с кораблем.
-                    if (startNextIteration) {
-                        continue;
-                    }
-
-                    // Массив с клетками где стоит корабль сформирован и все клетки подходят.
-                    // Присваивание клеткам где будет стоять корабль .ship = true.
-                    this.changeCellShipState(shipCellsCoord);
-
-                    // Присваивание окружающим клеткам shipAround = true;
-                    this.changeCellStateAroundShip(shipCellsCoord);
-                    tryToPut = false;
+                // Если не удалось расположить корабль.
+                if (startNextIteration) {
+                    shipCellsCoord = [];
+                    continue;
                 }
 
-                continue;
+                tryToPut = false;
+                console.log(shipCellsCoord)
             }
 
-            return;
+            // Массив с клетками где стоит корабль сформирован и все клетки подходят.
+            // Присваивание клеткам где будет стоять корабль .ship = true.
+            this.changeCellShipState(shipCellsCoord);
 
-            // /**
-            //  * Поставить 3х палубный корабль.
-            //  */
-            // if (ship.type === 3) {
-            //
-            // }
-            //
-            // /**
-            //  * Поставить 2х палубный корабль.
-            //  */
-            // if (ship.type === 2) {
-            //
-            // }
-
-
-
+            // Присваивание окружающим клеткам shipAround = true;
+            this.changeCellStateAroundShip(shipCellsCoord);
         }
+
     }
 
     validCell(x, y) {
@@ -141,6 +118,12 @@ export default class BattleField {
         return true;
     }
 
+    /**
+     * Поставить корабль.
+     * @param ship
+     * @param shipCellsCoord
+     * @returns {boolean}
+     */
     putShip(ship, shipCellsCoord) {
         let maxHor = 9;
         let maxVer = 9;
@@ -148,31 +131,17 @@ export default class BattleField {
 
         if (ship.direction === 0) {
             param = 'y';
-            maxVer = 6;
-
+            maxVer = 10 - ship.type;
         } else {
-            maxHor = 6
             param = 'x';
+            maxHor = 10 - ship.type;
         }
 
         let x = Helpers.getRandomNumber(0, maxHor);
         let y = Helpers.getRandomNumber(0, maxVer);
-        // let x = Helpers.getRandomNumber(0, 9);
-        // let y = Helpers.getRandomNumber(0, 6);
-
-        // Если первая палуба корабля не встает то функция возвращает false.
-        // if (!this.validCell(x, y)) {
-        //     return false;
-        // }
-        //
-        // shipCellsCoord.push([y, x]);
 
         // Если какая то из палуб корабля не встает то функция возвращает false.
-        if (!this.validPlaceToShip(ship.type, {x, y}, param, shipCellsCoord)) {
-            return false;
-        }
-
-        return true;
+        return this.validPlaceToShip(ship.type, {x, y}, param, shipCellsCoord);
     }
 
     /**

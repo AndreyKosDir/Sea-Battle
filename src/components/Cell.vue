@@ -30,7 +30,7 @@
         box-shadow: 0 0 0 1px blue inset;
     }
 
-    .ship {
+    .human .ship {
         background-color: blue;
     }
 
@@ -42,6 +42,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .computer .ship {
+        background-color: red;
     }
 
     .computer .battle-cell:hover:after {
