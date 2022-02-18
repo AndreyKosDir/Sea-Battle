@@ -25,7 +25,7 @@ export default class AI {
 
     fire() {
         const index = Helpers.getRandomNumber(0, this.cellsForShoot.length - 1);
-        return this.cellsForShoot.splice(index, 1);
 
+        return this.cellsForShoot.splice(index, 1);
     }
 }

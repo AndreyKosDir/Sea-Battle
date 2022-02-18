@@ -33,6 +33,7 @@
         display: flex;
         justify-content: center;
         align-items: start;
+        background-attachment: scroll;
     }
 
     .notice {

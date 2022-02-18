@@ -4,34 +4,34 @@ import {Helpers} from "./Helpers";
 export default class BattleField {
 
     constructor() {
-        this.columns = ['A', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'];
-        this.field = this.createBattleField(this.columns);
+        this.size = {width: 10, height: 10};
+        this.field = this.createBattleField(this.size);
         this.fleet = new Fleet().getFleet();
         this.positionTheFleet(this.fleet);
     }
 
     /**
      * Создать поле боя.
-     * @param columns
+     * @param size Размеры поля.
      * @returns {[]}
      */
-    createBattleField(columns) {
+    createBattleField(size) {
         const field = [];
 
-        for (let i = 0; i < columns.length; i++) {
-            const line = [];
+        for (let column = 0; column < size.width; column++) {
+            const row = [];
 
-            columns.forEach(() => {
+            for (let line = 0; line < size.height; line++) {
                 const cellInfo = {
                     shoot: false,
                     ship: false,
                     shipAround: false
                 }
 
-                line.push(cellInfo)
-            })
+                row.push(cellInfo)
+            }
 
-            field.push(line);
+            field.push(row);
         }
 
         return field;

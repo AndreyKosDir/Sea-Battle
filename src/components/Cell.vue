@@ -34,6 +34,7 @@
                     this.$emit('shootInShip', false);
                 }
             },
+
             getStyle() {
 
                 if (this.isShip && this.shoot) {
@@ -48,10 +49,12 @@
                     return 'ship'
                 }
             },
+
             updateStyle() {
                 this.style = this.getStyle();
             },
         },
+
         watch: {
             aiShoots() {
                 if (this.isShip && this.cellInfo.shoot) {
@@ -64,6 +67,7 @@
                 }
             },
         },
+
         beforeMount() {
             this.updateStyle();
         }
@@ -180,7 +184,6 @@
     .ship-shoot:after, .computer .ship-shoot:hover:after {
         transform: rotate(135deg);
     }
-
 
     .computer .ship-shoot {
         background-color: red;
