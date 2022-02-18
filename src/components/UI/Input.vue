@@ -1,6 +1,6 @@
 <template>
     <form @submit.prevent="onSubmit" class="form">
-        <input type="text" placeholder="Введите имя..." v-model="playerName">
+        <input type="text" placeholder="Введите имя..." v-model="name">
         <button>Принять</button>
     </form>
 </template>
@@ -10,22 +10,31 @@
         name: "Input",
         data() {
             return {
-                playerName: ''
+                name: '',
+                count: 0
             }
         },
         methods: {
             onSubmit() {
-                if (this.playerName.length === 0) {
+                if (this.name.length === 0) {
                     return;
                 }
 
-                this.$emit('start-game', this.playerName);
+                if (this.count === 0) {
+                    this.$emit('send-name', this.name, 'playerName');
+                    this.name = '';
+                    this.count++;
+                } else {
+                    this.$emit('send-name', this.name, 'computerName');
+                    this.$emit('start-game');
+                }
+
             }
         },
         watch: {
             playerName() {
-                if (this.playerName.length > 25) {
-                    this.playerName = this.playerName.slice(0, 25);
+                if (this.name.length > 25) {
+                    this.name = this.name.slice(0, 25);
                 }
             }
         }

@@ -24,7 +24,7 @@
             shoot(inTheMark) {
                 this.$emit('shoot', inTheMark);
             }
-        }
+        },
     }
 </script>
 

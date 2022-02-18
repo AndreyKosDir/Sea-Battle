@@ -1,7 +1,7 @@
 <template>
     <div class="startMenu">
-        <span>Введите ваше имя</span>
-        <Input @start-game="startGame"/>
+        <span>{{message}}</span>
+        <Input @start-game="startGame" @send-name="sendName"/>
     </div>
 </template>
 
@@ -10,9 +10,20 @@
     export default {
         name: "StartMenu",
         components: {Input},
+        data() {
+            return {
+                message: 'Введите ваше имя'
+            }
+        },
         methods: {
-            startGame(playerName) {
-                this.$emit('start-game', playerName)
+            startGame() {
+                this.$emit('start-game')
+            },
+            sendName(name, recipient) {
+                if (recipient === 'playerName') {
+                    this.message = 'Введите имя противника';
+                }
+                this.$emit('assign-name', name, recipient)
             }
         }
     }

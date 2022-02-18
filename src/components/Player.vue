@@ -10,6 +10,7 @@
             </div>
             <div class="battle-field">
                 <CellLine
+
                         :player="player"
                         v-for="(line, column) of board"
                         :cells="line"
@@ -41,7 +42,7 @@
             shoot(inTheMark) {
                 this.$emit('player-shoots', inTheMark);
             }
-        }
+        },
     }
 </script>
 

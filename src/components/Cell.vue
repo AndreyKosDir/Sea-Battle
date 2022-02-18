@@ -50,7 +50,7 @@
             },
             updateStyle() {
                 this.style = this.getStyle();
-            }
+            },
         },
         watch: {
             aiShoots() {
@@ -62,7 +62,7 @@
                 if (this.cellInfo.shoot) {
                     this.style = 'off-the-mark';
                 }
-            }
+            },
         },
         beforeMount() {
             this.updateStyle();
@@ -71,9 +71,6 @@
 </script>
 
 <style scoped>
-
-
-
     .human .battle-cell {
         width: 50px;
         height: 50px;
@@ -88,7 +85,7 @@
         content: ' ';
         width: 10px;
         height: 10px;
-        background-color: black;
+        background-color: blue;
         border-radius: 50%;
     }
 
@@ -171,7 +168,7 @@
         content: '';
         height: 40px;
         width: 5px;
-        background-color: red;
+        background-color: white;
         animation: none;
         border-radius: 0;
     }
@@ -184,8 +181,9 @@
         transform: rotate(135deg);
     }
 
-    .computer .ship {
-        background-color: green;
+
+    .computer .ship-shoot {
+        background-color: red;
     }
 
     .computer .off-the-mark:before,
