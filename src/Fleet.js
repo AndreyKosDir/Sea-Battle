@@ -15,7 +15,7 @@ export default class Fleet {
 
     /**
      * Создать флот кораблей.
-     * @param config Конфигурация корабля.
+     * @param config Конфигурация флота.
      * @returns {[]}
      */
     createFleet(config) {

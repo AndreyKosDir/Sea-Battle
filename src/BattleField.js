@@ -4,25 +4,24 @@ import {Helpers} from "./Helpers";
 export default class BattleField {
 
     constructor() {
-        this.rows = ['A', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'];
-        this.field = this.createBattleField(this.rows);
-        this.emptyCells = this.createEmptyCells();
+        this.columns = ['A', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'];
+        this.field = this.createBattleField(this.columns);
         this.fleet = new Fleet().getFleet();
-        this.putShips(this.fleet);
+        this.positionTheFleet(this.fleet);
     }
 
     /**
      * Создать поле боя.
-     * @param rows
+     * @param columns
      * @returns {[]}
      */
-    createBattleField(rows) {
+    createBattleField(columns) {
         const field = [];
 
-        for (let i = 0; i < rows.length; i++) {
+        for (let i = 0; i < columns.length; i++) {
             const line = [];
 
-            rows.forEach(() => {
+            columns.forEach(() => {
                 const cellInfo = {
                     shoot: false,
                     ship: false,
@@ -39,44 +38,28 @@ export default class BattleField {
     }
 
     /**
-     * Создать кординаты пустых ячеек поля.
-     * @returns {[]}
+     * Расставить флот.
+     * @param fleet Флот.
      */
-    createEmptyCells() {
-        const emptyCells = [];
-
-        for (let x = 0; x < 10; x++) {
-
-            for (let y = 0; y < 10; y++) {
-                emptyCells.push([x, y]);
-            }
-        }
-
-        return emptyCells;
-    }
-
-    async putShips(fleet) {
+    positionTheFleet(fleet) {
 
         for (const ship of fleet) {
-
             let shipCellsCoord = [];
+            let findPlace = true;
 
-            let tryToPut = true;
+            // Поиск места для поставновки корабля.
+            while (findPlace) {
+                let startNextIteration = !this.positionTheShip(ship, shipCellsCoord);
 
-            while (tryToPut) {
-                let startNextIteration = !this.putShip(ship, shipCellsCoord);
-
-                // Если не удалось расположить корабль.
                 if (startNextIteration) {
                     shipCellsCoord = [];
                     continue;
                 }
 
-                tryToPut = false;
+                findPlace = false;
             }
 
-            // Массив с клетками где стоит корабль сформирован и все клетки подходят.
-            // Присваивание клеткам где будет стоять корабль .ship = true.
+            // Присваивание клеткам где будет стоять корабль ship = true.
             this.changeCellShipState(shipCellsCoord);
 
             // Присваивание окружающим клеткам shipAround = true;
@@ -85,6 +68,35 @@ export default class BattleField {
 
     }
 
+    /**
+     * Расположить корабль.
+     * @param ship Корабль.
+     * @param shipCellsCoord Кординаты клеток корабля.
+     * @returns {boolean}
+     */
+    positionTheShip(ship, shipCellsCoord) {
+        let maxHor = 9;
+        let maxVer = 9;
+        let param;
+
+        if (ship.direction === 0) {
+            param = 'y';
+            maxVer = 10 - ship.type;
+        } else {
+            param = 'x';
+            maxHor = 10 - ship.type;
+        }
+
+        let x = Helpers.getRandomNumber(0, maxHor);
+        let y = Helpers.getRandomNumber(0, maxVer);
+
+        return this.validPlaceToShip(ship.type, {x, y}, param, shipCellsCoord);
+    }
+
+    /**
+     * Допустимое клектка для установки корабля.
+     * @returns {boolean|boolean}
+     */
     validCell(x, y) {
         return !this.field[y][x].ship && !this.field[y][x].shipAround;
     }
@@ -92,10 +104,9 @@ export default class BattleField {
     /**
      * Можно ли разместить корабль начиная с указанных координат.
      * @param shipLength Количество палуб корабля.
-     * @param x
-     * @param y
+     * @param {x, y} - Кординаты начала корабля.
      * @param param Координата которая будет увеличиваться.
-     * @param shipCellsCoord Массив с координатами ячеек корабля.
+     * @param shipCellsCoord Координаты клеток корабля.
      * @returns {boolean}
      */
     validPlaceToShip(shipLength, {x, y}, param, shipCellsCoord) {
@@ -118,34 +129,8 @@ export default class BattleField {
     }
 
     /**
-     * Поставить корабль.
-     * @param ship
-     * @param shipCellsCoord
-     * @returns {boolean}
-     */
-    putShip(ship, shipCellsCoord) {
-        let maxHor = 9;
-        let maxVer = 9;
-        let param;
-
-        if (ship.direction === 0) {
-            param = 'y';
-            maxVer = 10 - ship.type;
-        } else {
-            param = 'x';
-            maxHor = 10 - ship.type;
-        }
-
-        let x = Helpers.getRandomNumber(0, maxHor);
-        let y = Helpers.getRandomNumber(0, maxVer);
-
-        // Если какая то из палуб корабля не встает то функция возвращает false.
-        return this.validPlaceToShip(ship.type, {x, y}, param, shipCellsCoord);
-    }
-
-    /**
      * Изменить статус клеток, на которых может встать корабль.
-     * @param shipCellsCoord
+     * @param shipCellsCoord Координаты палуб корабля.
      */
     changeCellShipState(shipCellsCoord) {
         for (const cell of shipCellsCoord) {
@@ -156,7 +141,7 @@ export default class BattleField {
 
     /**
      * Изменить статус клеток расположенных вокруг корабля.
-     * @param shipCellsCoord
+     * @param shipCellsCoord Координаты палуб корабля.
      */
     changeCellStateAroundShip(shipCellsCoord) {
         for (const cell of shipCellsCoord) {

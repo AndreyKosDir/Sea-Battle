@@ -8,14 +8,17 @@
                         :board="playerField"
                         :player="'human'"
                         :name="playerName"
+                        :aiShoots="AIShoots"
                 />
                 <Player
                         :board="computerField"
-                        :player="'computer'" :name="computerName"
+                        :player="'computer'"
+                        :name="computerName"
+                        :humanTurn="humanTurn"
                         @player-shoots="playerShoots"
                 />
             </div>
-            <span class="playerTurn">Ходит {{playerName}}</span>
+            <span class="playerTurn">Ходит {{humanTurn ? playerName : computerName}}</span>
 
         </div>
         <GameOver v-if="gameOver" :win="win" @restart-game="restartGame"/>
@@ -28,17 +31,20 @@
     import StartMenu from "./components/StartMenu";
     import BattleField from "./BattleField";
     import GameOver from "./components/GameOver";
+    import AI from "./AI";
+    import {Helpers} from "./Helpers"
 
     export default {
         name: 'App',
         components: {GameOver, StartMenu, Player},
         data() {
             return {
-                hideGame: true,
+                hideGame: false,
+                AI: new AI(),
+                AIShoots: 0,
+                humanTurn: true,
                 playerName: 'Иосиф Брик',
                 computerName: 'T-1000',
-                // defaultPlayerField: new BattleField().field,
-                // defaultComputerField: new BattleField().field,
                 playerScore: 0,
                 computerScore: 0,
                 gameOver: false,
@@ -54,8 +60,31 @@
             playerShoots(inTheMark) {
                 if (inTheMark) {
                     this.playerScore += 1;
+                    this.humanTurn = true;
+                } else {
+                    this.humanTurn = false;
+                    this.computerShoots();
                 }
 
+            },
+            computerShoots() {
+                setTimeout(() => {
+                    if (this.gameOver) {
+                        return
+                    }
+
+                    const {column, line} = this.AI.fire()[0];
+                    const cell = this.playerField[column][line];
+                    cell.shoot = true;
+                    this.AIShoots += 1;
+
+                    if (cell.ship) {
+                        this.computerScore += 1;
+                        this.computerShoots();
+                    } else {
+                        this.humanTurn = true;
+                    }
+                }, Helpers.getRandomNumber(500, 1500))
             },
             endGame() {
                 if (this.playerScore > this.computerScore) {
@@ -68,6 +97,8 @@
                 this.gameOver = false;
                 this.playerScore = 0;
                 this.computerScore = 0;
+                this.humanTurn = true;
+                this.AI = new AI();
             }
         },
         computed: {
@@ -75,6 +106,7 @@
                 if (!this.gameOver) {
                     return new BattleField().field;
                 }
+
                 return [];
             },
 
@@ -82,6 +114,7 @@
                 if (!this.gameOver) {
                     return new BattleField().field;
                 }
+
                 return [];
             }
 
@@ -89,12 +122,12 @@
 
         watch: {
             playerScore() {
-                if (this.playerScore === 3) {
+                if (this.playerScore === 2) {
                     this.endGame();
                 }
             },
             computerScore() {
-                if (this.computerScore === 20) {
+                if (this.computerScore === 2) {
                     this.endGame()
                 }
             },

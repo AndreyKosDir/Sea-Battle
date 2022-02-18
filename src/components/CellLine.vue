@@ -7,6 +7,8 @@
                 :column="row"
                 :cellInfo="el"
                 :player="player"
+                :humanTurn="humanTurn"
+                :aiShoots="aiShoots"
                 @shootInShip="shoot"
         />
     </div>
@@ -17,7 +19,7 @@
     export default {
         name: "CellLine",
         components: {Cell},
-        props: ["player", "cells", "row"],
+        props: ["player", "cells", "row", "humanTurn", "aiShoots"],
         methods: {
             shoot(inTheMark) {
                 this.$emit('shoot', inTheMark);

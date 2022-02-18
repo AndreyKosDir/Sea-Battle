@@ -6,15 +6,17 @@
                 <div v-for="line of lines" :key="line">{{line}}</div>
             </div>
             <div class="numbers">
-                <div v-for="(line, row) of lines" :key="row">{{row + 1}}</div>
+                <div v-for="(line, column) of lines" :key="column">{{column + 1}}</div>
             </div>
             <div class="battle-field">
                 <CellLine
                         :player="player"
-                        v-for="(line, row) of board"
+                        v-for="(line, column) of board"
                         :cells="line"
-                        :row="row"
-                        :key="row"
+                        :row="column"
+                        :key="column"
+                        :humanTurn="humanTurn"
+                        :aiShoots="aiShoots"
                         @shoot="shoot"
                 >
                 </CellLine>
@@ -29,10 +31,10 @@
     export default {
         name: "Player",
         components: {CellLine},
-        props: ["board", "player", "name"],
+        props: ["board", "player", "name", "humanTurn", "aiShoots"],
         data() {
             return {
-                lines: ['A', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К']
+                lines: ['A', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'],
             }
         },
         methods: {

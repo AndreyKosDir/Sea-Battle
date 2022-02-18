@@ -10,21 +10,23 @@
 <script>
     export default {
         name: "Cell",
-        props: ["line", "column", "player", "cellInfo"],
+        props: ["line", "column", "player", "cellInfo", "humanTurn", "aiShoots"],
         data() {
             return {
                 shoot: this.cellInfo.shoot,
                 isShip: this.cellInfo.ship,
+                style: ''
             }
         },
 
         methods: {
             fire() {
-                if (this.player === 'human' || this.cellInfo.shoot) {
+                if (this.player === 'human' || this.cellInfo.shoot || !this.humanTurn) {
                     return;
                 }
 
                 this.shoot = true;
+                this.updateStyle();
 
                 if (this.isShip) {
                     this.$emit('shootInShip', true);
@@ -32,7 +34,6 @@
                     this.$emit('shootInShip', false);
                 }
             },
-
             getStyle() {
 
                 if (this.isShip && this.shoot) {
@@ -46,28 +47,62 @@
                 if (this.isShip) {
                     return 'ship'
                 }
-
-                return 'battle-cell';
+            },
+            updateStyle() {
+                this.style = this.getStyle();
             }
         },
-        computed: {
-            style() {
-                return this.getStyle();
+        watch: {
+            aiShoots() {
+                if (this.isShip && this.cellInfo.shoot) {
+                    this.style = 'ship-shoot';
+                    return;
+                }
+
+                if (this.cellInfo.shoot) {
+                    this.style = 'off-the-mark';
+                }
             }
+        },
+        beforeMount() {
+            this.updateStyle();
         }
     }
 </script>
 
 <style scoped>
 
-    .human .ship {
-        background-color: blue;
-    }
+
 
     .human .battle-cell {
         width: 50px;
         height: 50px;
         box-shadow: 0 0 0 1px blue inset;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .human .off-the-mark:after {
+        position: absolute;
+        content: ' ';
+        width: 10px;
+        height: 10px;
+        background-color: black;
+        border-radius: 50%;
+    }
+
+    .human .ship-shoot:after, .human .ship-shoot:before {
+        position: absolute;
+        content: '';
+        height: 40px;
+        width: 5px;
+        background-color: white;
+        border-radius: 0;
+    }
+
+    .human .ship,  .human .ship-shoot {
+        background-color: blue;
     }
 
     .computer .battle-cell {
@@ -141,11 +176,11 @@
         border-radius: 0;
     }
 
-    .ship-shoot:before, .ship-shoot:hover:before {
+    .ship-shoot:before, .computer .ship-shoot:hover:before {
         transform: rotate(45deg);
     }
 
-    .ship-shoot:after, .ship-shoot:hover:after {
+    .ship-shoot:after, .computer .ship-shoot:hover:after {
         transform: rotate(135deg);
     }
 
