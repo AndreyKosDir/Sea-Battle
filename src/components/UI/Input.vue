@@ -32,9 +32,9 @@
             }
         },
         watch: {
-            playerName() {
-                if (this.name.length > 25) {
-                    this.name = this.name.slice(0, 25);
+            name() {
+                if (this.name.length > 24) {
+                    this.name = this.name.slice(0, 24);
                 }
             }
         }
@@ -50,7 +50,7 @@
     }
 
     input {
-        width: 350px;
+        width: 390px;
         height: 35px;
         padding-left: 5px;
         font-size: 20px;

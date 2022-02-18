@@ -45,7 +45,7 @@
                     return 'off-the-mark'
                 }
 
-                if (this.isShip) {
+                if (this.isShip && this.player === 'human') {
                     return 'ship'
                 }
             },

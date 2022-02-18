@@ -23,6 +23,7 @@
                 if (recipient === 'playerName') {
                     this.message = 'Введите имя противника';
                 }
+
                 this.$emit('assign-name', name, recipient)
             }
         }
