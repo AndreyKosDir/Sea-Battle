@@ -8,7 +8,6 @@
                         :board="playerField"
                         :player="'human'"
                         :name="playerName"
-                        :aiShoots="AIShoots"
                 />
                 <Player
                         :board="computerField"
@@ -38,7 +37,11 @@
         components: {GameOver, StartMenu, Player},
         data() {
             return {
-                hideGame: true,
+
+                playerField: new BattleField().field,
+                computerField: new BattleField().field,
+
+                hideGame: false,
                 AI: new AI(),
                 AIShoots: 0,
                 humanTurn: true,
@@ -53,14 +56,19 @@
         methods: {
             startGame() {
                 this.hideGame = false;
+
             },
 
             assignName(name, recipient) {
                 this[recipient] = name;
             },
 
-            playerShoots(inTheMark) {
-                if (inTheMark) {
+            playerShoots(cellCoords) {
+                const {x, y} = cellCoords;
+                const cell = this.computerField[y][x];
+                cell.shoot = true;
+
+                if (cell.ship) {
                     this.playerScore += 1;
                     this.humanTurn = true;
                 } else {
@@ -104,27 +112,10 @@
                 this.playerScore = 0;
                 this.computerScore = 0;
                 this.humanTurn = true;
+                this.playerField = new BattleField().field;
+                this.computerField = new BattleField().field;
                 this.AI = new AI();
             },
-        },
-
-        computed: {
-            playerField() {
-                if (!this.gameOver) {
-                    return new BattleField().field;
-                }
-
-                return [];
-            },
-
-            computerField() {
-                if (!this.gameOver) {
-                    return new BattleField().field;
-                }
-
-                return [];
-            }
-
         },
 
         watch: {

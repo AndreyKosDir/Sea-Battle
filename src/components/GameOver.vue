@@ -29,7 +29,7 @@
         position: absolute;
         width: 100vw;
         height: 100vh;
-        background-color: white;
+        background-color: rgba(255, 255, 255, 0.3);
         display: flex;
         justify-content: center;
         align-items: start;

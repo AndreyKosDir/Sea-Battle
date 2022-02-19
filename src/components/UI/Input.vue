@@ -50,7 +50,7 @@
     }
 
     input {
-        width: 390px;
+        width: 380px;
         height: 35px;
         padding-left: 5px;
         font-size: 20px;

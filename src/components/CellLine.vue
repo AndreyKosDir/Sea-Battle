@@ -1,15 +1,14 @@
 <template>
-    <div>
+    <div class="cell-line">
         <Cell
-                v-for="(el, i) of cells"
-                :key="row + '' + i"
-                :line="i"
-                :column="row"
-                :cellInfo="el"
+                v-for="(cell, column) of cellsArr"
+                :key="column"
+                :column="column"
+                :line="line"
+                :cell="cell"
                 :player="player"
                 :humanTurn="humanTurn"
-                :aiShoots="aiShoots"
-                @shootInShip="shoot"
+                @shoot="shoot"
         />
     </div>
 </template>
@@ -19,15 +18,17 @@
     export default {
         name: "CellLine",
         components: {Cell},
-        props: ["player", "cells", "row", "humanTurn", "aiShoots"],
+        props: ["player", "cellsArr", "line", "humanTurn"],
         methods: {
-            shoot(inTheMark) {
-                this.$emit('shoot', inTheMark);
+            shoot(cellCoords) {
+                this.$emit('shoot', cellCoords);
             }
         },
     }
 </script>
 
 <style scoped>
-
+    .cell-line {
+        display: flex;
+    }
 </style>

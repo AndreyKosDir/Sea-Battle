@@ -10,66 +10,54 @@
 <script>
     export default {
         name: "Cell",
-        props: ["line", "column", "player", "cellInfo", "humanTurn", "aiShoots"],
+        props: ["line", "column", "player", "cell", "humanTurn"],
         data() {
             return {
-                shoot: this.cellInfo.shoot,
-                isShip: this.cellInfo.ship,
+                isShip: this.cell.ship,
                 style: ''
             }
         },
 
         methods: {
             fire() {
-                if (this.player === 'human' || this.cellInfo.shoot || !this.humanTurn) {
+                if (this.player === 'human' || this.cell.shoot || !this.humanTurn) {
                     return;
                 }
 
-                this.shoot = true;
-                this.updateStyle();
+                const x = this.column;
+                const y = this.line
 
-                if (this.isShip) {
-                    this.$emit('shootInShip', true);
-                } else {
-                    this.$emit('shootInShip', false);
-                }
+                this.$emit('shoot', {x, y});
             },
 
-            getStyle() {
-
-                if (this.isShip && this.shoot) {
-                    return 'ship-shoot';
-                }
-
-                if (this.shoot) {
-                    return 'off-the-mark'
-                }
-
-                if (this.isShip && this.player === 'human') {
-                    return 'ship'
-                }
-            },
-
-            updateStyle() {
-                this.style = this.getStyle();
-            },
-        },
-
-        watch: {
-            aiShoots() {
-                if (this.isShip && this.cellInfo.shoot) {
+            setStyle() {
+                if (this.isShip && this.cell.shoot) {
                     this.style = 'ship-shoot';
                     return;
                 }
 
-                if (this.cellInfo.shoot) {
+                if (this.cell.shoot) {
                     this.style = 'off-the-mark';
                 }
+
+                if (this.isShip && this.player === 'human') {
+                    this.style = 'ship';
+                }
             },
+
+        },
+
+        watch: {
+            cell: {
+                handler() {
+                    this.setStyle();
+                },
+                deep: true,
+            }
         },
 
         beforeMount() {
-            this.updateStyle();
+            this.setStyle();
         }
     }
 </script>
@@ -187,6 +175,13 @@
 
     .computer .ship-shoot {
         background-color: red;
+    }
+
+    /**
+    Нужен только для отладки
+     */
+    .computer .ship {
+        background-color: gray;
     }
 
     .computer .off-the-mark:before,

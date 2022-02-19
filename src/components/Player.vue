@@ -3,21 +3,19 @@
         <span class="playerName">{{name}}</span>
         <div class="game-field">
             <div class="alpha">
-                <div v-for="line of lines" :key="line">{{line}}</div>
+                <div v-for="columnName of columnsName" :key="columnName">{{columnName}}</div>
             </div>
             <div class="numbers">
-                <div v-for="(line, column) of lines" :key="column">{{column + 1}}</div>
+                <div v-for="(columnName, index) of columnsName" :key="index">{{index + 1}}</div>
             </div>
             <div class="battle-field">
                 <CellLine
-
                         :player="player"
-                        v-for="(line, column) of board"
-                        :cells="line"
-                        :row="column"
-                        :key="column"
+                        v-for="(cellsArr, line) of board"
+                        :cellsArr="cellsArr"
+                        :line="line"
+                        :key="line + cellLineKey"
                         :humanTurn="humanTurn"
-                        :aiShoots="aiShoots"
                         @shoot="shoot"
                 >
                 </CellLine>
@@ -32,17 +30,26 @@
     export default {
         name: "Player",
         components: {CellLine},
-        props: ["board", "player", "name", "humanTurn", "aiShoots"],
+        props: ["board", "player", "name", "humanTurn"],
         data() {
             return {
-                lines: ['A', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'],
-            }
+                columnsName: ['A', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'],
+                cellLineKey: Date.now()
+            };
         },
         methods: {
-            shoot(inTheMark) {
-                this.$emit('player-shoots', inTheMark);
+            shoot(cellCoords) {
+                this.$emit('player-shoots', cellCoords);
+            },
+            forceRerender() {
+                this.cellLineKey = Date.now();
             }
         },
+        watch: {
+            board() {
+                this.forceRerender();
+            }
+        }
     }
 </script>
 
@@ -101,6 +108,7 @@
         width: 500px;
         height: 500px;
         display: flex;
+        flex-direction: column;
     }
 
     .human .battle-field {
