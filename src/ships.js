@@ -1,6 +1,6 @@
 import {Helpers} from "./Helpers";
 
-export default class Fleet {
+export default class Ships {
 
     constructor() {
         this.config = [
@@ -44,7 +44,7 @@ export default class Fleet {
      * Получить флот.
      * @returns {*[]}
      */
-    getFleet() {
+    getShips() {
         return this.fleet;
     }
 }

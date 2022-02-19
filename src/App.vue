@@ -37,13 +37,10 @@
         components: {GameOver, StartMenu, Player},
         data() {
             return {
-
-                playerField: new BattleField().field,
-                computerField: new BattleField().field,
-
+                player: new BattleField(),
+                computer: new BattleField(),
                 hideGame: false,
                 AI: new AI(),
-                AIShoots: 0,
                 humanTurn: true,
                 playerName: 'Иосиф Брик',
                 computerName: 'T-1000',
@@ -87,7 +84,6 @@
                     const {column, line} = this.AI.fire()[0];
                     const cell = this.playerField[column][line];
                     cell.shoot = true;
-                    this.AIShoots += 1;
 
                     if (cell.ship) {
                         this.computerScore += 1;
@@ -112,8 +108,8 @@
                 this.playerScore = 0;
                 this.computerScore = 0;
                 this.humanTurn = true;
-                this.playerField = new BattleField().field;
-                this.computerField = new BattleField().field;
+                this.player = new BattleField();
+                this.computer = new BattleField();
                 this.AI = new AI();
             },
         },
@@ -130,6 +126,15 @@
                 }
             }
         },
+
+        computed: {
+            playerField() {
+                return this.player.field;
+            },
+            computerField() {
+                return this.computer.field;
+            }
+        }
 
     }
 </script>

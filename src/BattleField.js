@@ -1,13 +1,14 @@
-import Fleet from "./Fleet";
+import Ships from "./ships";
 import {Helpers} from "./Helpers";
 
 export default class BattleField {
 
     constructor() {
+        this.fleet = {};
         this.size = {width: 10, height: 10};
         this.field = this.createBattleField(this.size);
-        this.fleet = new Fleet().getFleet();
-        this.positionTheFleet(this.fleet);
+        this.ships = new Ships().getShips();
+        this.positionTheShips(this.ships);
     }
 
     /**
@@ -24,7 +25,7 @@ export default class BattleField {
             for (let line = 0; line < size.height; line++) {
                 const cellInfo = {
                     shoot: false,
-                    ship: false,
+                    ship: null,
                     shipAround: false
                 }
 
@@ -38,21 +39,24 @@ export default class BattleField {
     }
 
     /**
-     * Расставить флот.
-     * @param fleet Флот.
+     * Расставить корабли.
+     * @param ships Корабли.
      */
-    positionTheFleet(fleet) {
+    positionTheShips(ships) {
 
-        for (const ship of fleet) {
-            let shipCellsCoord = [];
+        for (let index = 0; index < ships.length; index++) {
+
+            const shipId = `ship #${index + 1}`;
+
+            let shipDecksCoords = [];
             let findPlace = true;
 
             // Поиск места для поставновки корабля.
             while (findPlace) {
-                let startNextIteration = !this.positionTheShip(ship, shipCellsCoord);
+                let startNextIteration = !this.positionTheShip(ships[index], shipDecksCoords);
 
                 if (startNextIteration) {
-                    shipCellsCoord = [];
+                    shipDecksCoords = [];
                     continue;
                 }
 
@@ -60,12 +64,26 @@ export default class BattleField {
             }
 
             // Присваивание клеткам где будет стоять корабль ship = true.
-            this.changeCellShipState(shipCellsCoord);
+            this.changeCellShipState(shipDecksCoords, shipId);
+
+            this.addShipToFleet(shipId, shipDecksCoords);
 
             // Присваивание окружающим клеткам shipAround = true;
-            this.changeCellStateAroundShip(shipCellsCoord);
+            this.changeCellStateAroundShip(shipDecksCoords, shipId);
         }
 
+    }
+
+    /**
+     * Добавить корабль во флот.
+     * @param shipId
+     * @param shipDecksCoords
+     */
+    addShipToFleet(shipId, shipDecksCoords) {
+        this.fleet[shipId] = {
+            decks: shipDecksCoords,
+            cellsAroundShip: []
+        }
     }
 
     /**
@@ -130,21 +148,27 @@ export default class BattleField {
 
     /**
      * Изменить статус клеток, на которых может встать корабль.
-     * @param shipCellsCoord Координаты палуб корабля.
+     * @param shipDecksCoords Координаты палуб корабля.
+     * @param shipId ID корабля.
      */
-    changeCellShipState(shipCellsCoord) {
-        for (const cell of shipCellsCoord) {
+    changeCellShipState(shipDecksCoords, shipId) {
+
+        for (const cell of shipDecksCoords) {
             const [y, x] = cell;
-            this.field[y][x].ship = true;
+            this.field[y][x].ship = {
+                id: shipId,
+                destroyed: false
+            };
         }
     }
 
     /**
      * Изменить статус клеток расположенных вокруг корабля.
-     * @param shipCellsCoord Координаты палуб корабля.
+     * @param shipDecksCoords Координаты палуб корабля.
+     * @param shipId ID корабля.
      */
-    changeCellStateAroundShip(shipCellsCoord) {
-        for (const cell of shipCellsCoord) {
+    changeCellStateAroundShip(shipDecksCoords, shipId) {
+        for (const cell of shipDecksCoords) {
             const [y, x] = cell;
 
             for (let i = y - 1; i <= y + 1; i++) {
@@ -157,6 +181,8 @@ export default class BattleField {
                     if (this.field[i][j] === undefined || this.field[i][j].ship) {
                         continue;
                     }
+
+                    this.fleet[shipId].cellsAroundShip.push([i, j]);
 
                     this.field[i][j].shipAround = true;
                 }
