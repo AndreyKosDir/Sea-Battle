@@ -89,7 +89,7 @@
                     } else {
                         this.humanTurn = true;
                     }
-                }, Helpers.getRandomNumber(500, 1200))
+                }, Helpers.getRandomNumber(600, 1200))
             },
 
             endGame() {
