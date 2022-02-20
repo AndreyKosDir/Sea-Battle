@@ -46,7 +46,7 @@ export default class BattleField {
 
         for (let index = 0; index < ships.length; index++) {
 
-            const shipId = `ship #${index + 1}`;
+            const shipId = `ship#${index + 1}`;
 
             let shipDecksCoords = [];
             let findPlace = true;
@@ -186,6 +186,34 @@ export default class BattleField {
 
                     this.field[i][j].shipAround = true;
                 }
+            }
+        }
+    }
+
+
+    shootAtTheShip(shipId) {
+
+        //Обход флота, для проверки уничтожен ли корабль.
+        let shipIsDestroyed = true;
+
+        for (const shipDeckCoords of this.fleet[shipId].decks) {
+            const [y, x] = shipDeckCoords;
+
+            if (!this.field[y][x].shoot) {
+                shipIsDestroyed = false;
+                break;
+            }
+        }
+
+        if (shipIsDestroyed) {
+            for (const shipDeckCoords of this.fleet[shipId].decks) {
+                const [y, x] = shipDeckCoords;
+                this.field[y][x].ship.destroyed = true;
+            }
+
+            for (const cellAroundShipCoords of this.fleet[shipId].cellsAroundShip) {
+                const [y, x] = cellAroundShipCoords;
+                this.field[y][x].shoot = true;
             }
         }
     }

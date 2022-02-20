@@ -13,7 +13,7 @@
         props: ["line", "column", "player", "cell", "humanTurn"],
         data() {
             return {
-                isShip: this.cell.ship,
+                ship: this.cell.ship,
                 style: ''
             }
         },
@@ -31,16 +31,24 @@
             },
 
             setStyle() {
-                if (this.isShip && this.cell.shoot) {
+                if (this.ship && this.cell.shoot) {
+
+                    if (this.ship.destroyed && this.player === 'computer') {
+                        this.style = 'destroyed';
+                        return
+                    }
+
                     this.style = 'ship-shoot';
-                    return;
+                    return
+
                 }
 
                 if (this.cell.shoot) {
                     this.style = 'off-the-mark';
+                    return
                 }
 
-                if (this.isShip && this.player === 'human') {
+                if (this.ship && this.player === 'human') {
                     this.style = 'ship';
                 }
             },
@@ -111,7 +119,7 @@
         height: 16px;
         background-color: red;
         border-radius: 50%;
-        animation: target 3s infinite;
+        animation: target 2s infinite;
     }
 
     .computer .battle-cell:hover:before {
@@ -120,7 +128,7 @@
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        animation: pulse 3s infinite;
+        animation: pulse 2s infinite;
     }
 
     @keyframes target {
@@ -147,7 +155,10 @@
         }
     }
 
-    .computer .ship-shoot, .computer .off-the-mark {
+    .computer .ship-shoot,
+    .computer .off-the-mark,
+    .computer .destroyed
+    {
         cursor: default;
     }
 
@@ -160,29 +171,56 @@
         content: '';
         height: 40px;
         width: 5px;
+        background-color: red;
+        animation: none;
+        border-radius: 0;
+    }
+
+
+    /*.computer .ship-shoot {*/
+    /*    background-color: red;*/
+    /*}*/
+
+    .computer .destroyed {
+        background-color: red;
+    }
+
+    .computer .destroyed:before,
+    .computer .destroyed:hover:before,
+    .computer .destroyed:after,
+    .computer .destroyed:hover:after
+    {
+        position: absolute;
+        content: '';
+        height: 40px;
+        width: 5px;
         background-color: white;
         animation: none;
         border-radius: 0;
     }
 
-    .ship-shoot:before, .computer .ship-shoot:hover:before {
+    .ship-shoot:before,
+    .computer .destroyed:before,
+    .computer .ship-shoot:hover:before,
+    .computer .destroyed:hover:before
+    {
         transform: rotate(45deg);
     }
 
-    .ship-shoot:after, .computer .ship-shoot:hover:after {
+    .ship-shoot:after,
+    .destroyed:after,
+    .computer .ship-shoot:hover:after,
+    .computer .destroyed:hover:after
+    {
         transform: rotate(135deg);
-    }
-
-    .computer .ship-shoot {
-        background-color: red;
     }
 
     /**
     Нужен только для отладки
      */
-    .computer .ship {
-        background-color: gray;
-    }
+    /*.computer .ship {*/
+    /*    background-color: gray;*/
+    /*}*/
 
     .computer .off-the-mark:before,
     .computer .off-the-mark:hover:before,

@@ -2,8 +2,9 @@ import {Helpers} from "./Helpers";
 
 export default class AI {
 
-    constructor() {
-        this.cellsForShoot = this.createCellsForShoot();
+    constructor(field) {
+        this.field = field;
+        // this.cellsForShoot = this.createCellsForShoot();
     }
 
     /**
@@ -23,9 +24,33 @@ export default class AI {
         return emptyCells;
     }
 
+    /**
+     * Выстрелить в клетку.
+     * @returns {null|*}
+     */
     fire() {
-        const index = Helpers.getRandomNumber(0, this.cellsForShoot.length - 1);
 
-        return this.cellsForShoot.splice(index, 1);
+        let tryShootCell = true;
+
+        while (tryShootCell) {
+            const x = Helpers.getRandomNumber(0, 9);
+            const y = Helpers.getRandomNumber(0, 9);
+
+            const cell = this.field[y][x];
+
+            if (!cell.shoot) {
+                tryShootCell = false;
+                cell.shoot = true;
+
+                if (cell.ship) {
+
+                    return cell.ship.id;
+                }
+
+                return null;
+            }
+        }
+
+
     }
 }
