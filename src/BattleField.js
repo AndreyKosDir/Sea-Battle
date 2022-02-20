@@ -65,7 +65,6 @@ export default class BattleField {
 
             // Присваивание клеткам где будет стоять корабль ship = true.
             this.changeCellShipState(shipDecksCoords, shipId);
-
             this.addShipToFleet(shipId, shipDecksCoords);
 
             // Присваивание окружающим клеткам shipAround = true;
@@ -183,7 +182,6 @@ export default class BattleField {
                     }
 
                     this.fleet[shipId].cellsAroundShip.push([i, j]);
-
                     this.field[i][j].shipAround = true;
                 }
             }
@@ -191,11 +189,14 @@ export default class BattleField {
     }
 
 
+    /**
+     * Выстрелить в корабль.
+     * @param shipId ID Корабля.
+     */
     shootAtTheShip(shipId) {
-
-        //Обход флота, для проверки уничтожен ли корабль.
         let shipIsDestroyed = true;
 
+        //Обход флота, для проверки уничтожен ли корабль.
         for (const shipDeckCoords of this.fleet[shipId].decks) {
             const [y, x] = shipDeckCoords;
 

@@ -33,8 +33,8 @@
         },
         watch: {
             name() {
-                if (this.name.length > 24) {
-                    this.name = this.name.slice(0, 24);
+                if (this.name.length > 22) {
+                    this.name = this.name.slice(0, 22);
                 }
             }
         }

@@ -39,8 +39,8 @@
             return {
                 player: new BattleField(),
                 computer: new BattleField(),
-                hideGame: false,
-                humanTurn: true,
+                hideGame: true,
+                humanTurn: false,
                 playerName: 'Иосиф Брик',
                 computerName: 'T-1000',
                 playerScore: 0,
@@ -52,7 +52,7 @@
         methods: {
             startGame() {
                 this.hideGame = false;
-
+                this.computerShoots();
             },
 
             assignName(name, recipient) {
@@ -105,9 +105,10 @@
                 this.gameOver = false;
                 this.playerScore = 0;
                 this.computerScore = 0;
-                this.humanTurn = true;
+                this.humanTurn = false;
                 this.player = new BattleField();
                 this.computer = new BattleField();
+                this.computerShoots();
             },
         },
 
@@ -134,8 +135,7 @@
             AI() {
                 return new AI(this.playerField)
             }
-        }
-
+        },
     }
 </script>
 

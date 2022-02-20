@@ -176,11 +176,6 @@
         border-radius: 0;
     }
 
-
-    /*.computer .ship-shoot {*/
-    /*    background-color: red;*/
-    /*}*/
-
     .computer .destroyed {
         background-color: red;
     }
@@ -214,13 +209,6 @@
     {
         transform: rotate(135deg);
     }
-
-    /**
-    Нужен только для отладки
-     */
-    /*.computer .ship {*/
-    /*    background-color: gray;*/
-    /*}*/
 
     .computer .off-the-mark:before,
     .computer .off-the-mark:hover:before,
